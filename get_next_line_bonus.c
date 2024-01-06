@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcoze <tcoze@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tcoze <tcoze@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/30 19:04:58 by tcoze             #+#    #+#             */
-/*   Updated: 2023/12/15 14:09:57 by logname          ###   ########.fr       */
+/*   Created: 2024/01/06 17:07:32 by tcoze             #+#    #+#             */
+/*   Updated: 2024/01/06 17:07:32 by tcoze            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <stdio.h>
 
 char		*get_next_line(int fd);
@@ -20,20 +20,22 @@ static char	*ft_check_first_buff(char *out, char *buff);
 
 char	*get_next_line(int fd)
 {
-	static char	buff[BUFFER_SIZE];
+	static char	buff[MAX_FD][BUFFER_SIZE + 1];
 	char		*out;
 	int			value_read;
 
+	if (fd > MAX_FD || fd < 0)
+		return (NULL);
 	value_read = 0;
 	out = ft_calloc(1, 1);
 	if (!out)
 		return (NULL);
-	out = ft_check_first_buff(out, buff);
+	out = ft_check_first_buff(out, buff[fd]);
 	if (!out)
 		return (NULL);
 	if (ft_strchr(out, '\n') != -1)
 		return (out);
-	out = ft_read_and_fill(fd, out, buff, value_read);
+	out = ft_read_and_fill(fd, out, buff[fd], value_read);
 	if (!out)
 		return (NULL);
 	if (*out)
